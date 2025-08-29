@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>버추얼 테이블 프로젝트 대화형 보고서</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Neutral & Muted Blue -->
+    <!-- Application Structure Plan: 이 애플리케이션은 사용자가 프로젝트의 핵심 성과를 즉시 인지하고, 점진적으로 세부 정보를 탐색할 수 있도록 설계되었습니다. 상단에 핵심 요약(KPI)을 배치하여 주요 결론(현장 편집 방식의 효율성)을 먼저 전달합니다. 그 후, '리허설 경과' 탭 인터페이스를 통해 각 차수의 상세 내용을 선택적으로 볼 수 있게 하여 정보 과부하를 방지합니다. 워크플로우 비교 차트는 텍스트로만 설명된 효율성 차이를 시각적으로 명확하게 보여주어 의사결정의 근거를 강화합니다. 이 구조는 보고서의 연대기적 흐름을 따르면서도, 사용자가 가장 중요하게 생각할 정보에 빠르게 접근할 수 있도록 하여 사용성을 극대화합니다. -->
+    <!-- Visualization & Content Choices: 1. 워크플로우 효율성 비교 -> 목표: 비교 -> 시각화: 가로 막대 차트(Chart.js) -> 상호작용: 툴팁으로 정확한 시간 표시 -> 정당성: '원격 편집'과 '현장 편집'의 총 소요 시간 차이를 직관적으로 보여주어 현장 편집 방식 채택의 타당성을 명확히 전달합니다. 2. 리허설 로그 -> 목표: 정리/탐색 -> 표현 방식: 탭 기반 콘텐츠 섹션(HTML/JS) -> 상호작용: 탭 클릭 시 해당 회차의 상세 정보(목표, 결과, 피드백) 표시 -> 정당성: 여러 회차에 걸친 방대한 텍스트 정보를 깔끔하게 정리하고, 사용자가 원하는 정보에만 집중할 수 있도록 하여 가독성과 탐색 효율을 높입니다. 3. 기본 프로토콜 -> 목표: 정보 전달 -> 표현 방식: 순서도 형태의 HTML/CSS 다이어그램 -> 상호작용: 없음 (정적 정보) -> 정당성: 복잡할 수 있는 프로세스를 단계별 시각적 흐름으로 표현하여 이해를 돕습니다. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f7f4;
+            color: #333;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 2.5rem;
+            padding-bottom: 2rem;
+            cursor: pointer;
+        }
+        .timeline-item:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0.5rem;
+            width: 2px;
+            height: 100%;
+            background-color: #d1d5db;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 9999px;
+            border: 4px solid #f8f7f4;
+            transition: transform 0.2s;
+        }
+        .timeline-item.active .timeline-dot {
+            transform: scale(1.2);
+        }
+        .timeline-item.active {
+            font-weight: 700;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            background-color: #e5e7eb;
+        }
+        .video-container iframe, .video-container div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .flow-step {
+            position: relative;
+            padding-left: 2.5rem;
+        }
+        .flow-step:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            left: 0.75rem;
+            top: 1.75rem;
+            width: 2px;
+            height: calc(100% + 1rem);
+            background-color: #d1d5db;
+        }
+        .flow-dot {
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 1.75rem;
+            height: 1.75rem;
+            border-radius: 9999px;
+            background-color: #3b82f6;
+            border: 4px solid #eff6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">버추얼 테이블 프로젝트</h1>
+            <p class="text-lg text-gray-600">리허설 경과 및 성과 대시보드</p>
+        </header>
+
+        <main>
+             <section id="rehearsal-timeline" class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-700 mb-8 text-center">리허설 진행 타임라인</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div id="timeline-nav" class="lg:col-span-1">
+                        <!-- 타임라인 항목이 여기에 동적으로 생성됩니다. -->
+                    </div>
+                    <div id="timeline-details" class="lg:col-span-2 bg-white p-6 rounded-xl shadow-md min-h-[300px]">
+                        <!-- 선택된 항목의 상세 정보가 여기에 표시됩니다. -->
+                    </div>
+                </div>
+            </section>
+
+             <section id="process-flow" class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-700 mb-8 text-center">버추얼 테이블 상세 프로세스</h2>
+                <div class="bg-white p-8 rounded-xl shadow-md max-w-4xl mx-auto">
+                    <div class="space-y-8">
+                        <div class="flow-step">
+                            <div class="flow-dot">1</div>
+                            <h3 class="text-lg font-bold text-gray-800">주요 선수 선정</h3>
+                            <p class="text-gray-600">디렉터가 주목할 만한 선수(Notable Player)를 2~3명 선정합니다.</p>
+                        </div>
+                        <div class="flow-step">
+                            <div class="flow-dot">2</div>
+                            <h3 class="text-lg font-bold text-gray-800">상황 파악 및 촬영 준비</h3>
+                            <p class="text-gray-600">현장 PD, 카메라, 데이터 매니저가 테이블을 순회하며 상황을 파악하고, 주요 선수의 좋은 핸드가 감지되면 모든 스탭을 호출하여 촬영을 시작합니다.</p>
+                        </div>
+                        <div class="flow-step">
+                            <div class="flow-dot">3</div>
+                            <h3 class="text-lg font-bold text-gray-800">데이터 수집 및 촬영</h3>
+                            <p class="text-gray-600">데이터 매니저는 아래 항목들을 포함한 핸드의 상세 데이터를 수집합니다.</p>
+                            <div class="mt-2 pl-4 grid grid-cols-1 md:grid-cols-2 gap-x-8">
+                                <div>
+                                    <h4 class="font-semibold text-gray-700">핸드 데이터</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-500">
+                                        <li>보드 카드</li>
+                                        <li>플레이어 카드</li>
+                                        <li>플레이어 액션 및 액션별 칩</li>
+                                        <li>팟 사이즈 / 칩 스택</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700 mt-2 md:mt-0">편집 데이터</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-500">
+                                        <li>노터블 플레이어</li>
+                                        <li>인점 가이드</li>
+                                        <li>카드 오픈 여부 (미스터리 핸드 스타일)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="flow-dot">4</div>
+                            <h3 class="text-lg font-bold text-gray-800">데이터 정리</h3>
+                            <p class="text-gray-600">촬영 완료 후, 데이터 매니저는 촬영 파일명을 데이터 시트에 정확히 기록합니다.</p>
+                        </div>
+                         <div class="flow-step">
+                            <div class="flow-dot">5</div>
+                            <h3 class="text-lg font-bold text-gray-800">소스 전달 및 검증</h3>
+                            <p class="text-gray-600">카메라 메모리카드를 후반 편집자에게 전달하고, 편집자는 구글 시트와 촬영본을 대조하여 검증합니다.</p>
+                        </div>
+                         <div class="flow-step">
+                            <div class="flow-dot">6</div>
+                            <h3 class="text-lg font-bold text-gray-800">그래픽 제작 및 컷 편집 (병렬 진행)</h3>
+                            <p class="text-gray-600">검증 완료 후, 아래 작업들이 동시에 진행됩니다.</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1 text-gray-500 pl-4">
+                                <li>포커 GUI 그래픽 생성</li>
+                                <li>컷 편집 (복수 캠의 경우)</li>
+                            </ul>
+                        </div>
+                        <div class="flow-step">
+                            <div class="flow-dot">7</div>
+                            <h3 class="text-lg font-bold text-gray-800">최종 편집</h3>
+                             <p class="text-gray-600">영상에 포커 GUI 그래픽을 삽입하고, 인/아웃점을 편집합니다.</p>
+                        </div>
+                         <div class="flow-step">
+                            <div class="flow-dot">8</div>
+                            <h3 class="text-lg font-bold text-gray-800">콘텐츠 추출 및 전송</h3>
+                             <p class="text-gray-600">최종 완성된 콘텐츠를 추출하여 한국으로 전송합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const rehearsalData = {
+            '1': {
+                id: '1', date: '8/22', status: '완료', goal: '현장 감각 습득 및 기본 개념 파악', location: '강남 뉴스톤', duration: '7시간',
+                participants: { '카메라': '매튜, 카이', '데이터 매니저': '트레이', '후반 편집': '에이든' },
+                results: [
+                    { type: 'issue', text: '소니 카메라 장비가 무거워 경량화 필요.' },
+                    { type: 'improvement', text: '후반 편집 의문점 해결을 위한 현장팀과의 소통 채널 강화 필요.' },
+                    { type: 'improvement', text: '2카메라 운영 시, 명확한 사전 역할 분담 및 동선 합의 필수.' }
+                ],
+                videoId: 'your_video_id_1',
+                videoInfo: {
+                    title: '초기 테스트 결과물',
+                    cameras: '2대',
+                    duration: '확인 필요'
+                }
+            },
+            '2': {
+                id: '2', date: '8/28', status: '완료', goal: '프로세스 정립 및 2카메라 테스트', location: 'GGP 스튜디오', duration: '2시간',
+                participants: { '카메라': '에이든, 카이', '데이터 매니저': '헨리', '후반 편집': '던' },
+                results: [
+                    { type: 'decision', text: '사내 액션캠은 화질 저하로 실전 사용 불가. 프로덕션용 카메라 사용 결정.' },
+                    { type: 'issue', text: '슬랙을 통한 데이터 전송 방식 비효율적.' },
+                    { type: 'issue', text: '노트북+구글 시트 방식의 데이터 매니징은 현장에 부적합. 모바일 기반 방식 모색 필요.' }
+                ],
+                videoId: 'your_video_id_2',
+                videoInfo: {
+                    title: '2카메라 테스트 결과물',
+                    cameras: '2대',
+                    duration: '확인 필요'
+                }
+            },
+            '3': {
+                id: '3', date: '8/29', status: '완료', goal: '프로세스 정립 2차 및 워크플로우 최적화', location: 'GGP 스튜디오', duration: '2시간',
+                participants: { '카메라': '에이든, 매튜', '데이터 매니저': '헨리', '후반 편집': '던' },
+                results: [
+                    { type: 'decision', text: '현장 편집 방식 채택. (콘텐츠 제작 시간 40-50분 → 15-25분 단축)' },
+                    { type: 'issue', text: '데이터 매니징 앱의 UI/UX가 직관적이지 않고 버그 존재. 개선 필요.' }
+                ],
+                videoId: 'your_video_id_3',
+                videoInfo: {
+                    title: '현장 편집 방식 결과물',
+                    cameras: '2대',
+                    duration: '약 20분'
+                }
+            },
+            '4': {
+                id: '4', date: '9/1', status: '예정', goal: '비숙련자 후반 편집 시간 측정', location: 'GGP 스튜디오', duration: '약 2시간',
+                participants: { '카메라': '에이든, 카이', '후반 작업': '레이, 마이크', '데이터 매니저': '미정' },
+                results: [
+                    { type: 'pending', text: '외주 인력 운용 기준 마련을 위한 시간 측정 진행' }
+                ],
+                videoId: '',
+                videoInfo: {
+                    title: '비숙련자 편집 테스트 결과물 (예정)',
+                    cameras: '2대',
+                    duration: '측정 예정'
+                }
+            },
+            '5': {
+                id: '5', date: '9월 2주차', status: '계획', goal: '현장 편집 워크플로우 숙련도 향상', location: '미정', duration: '미정',
+                participants: { '참여 인원': '미정' },
+                results: [
+                    { type: 'pending', text: '외주 인력 교육 및 비상 상황 대비 훈련.' }
+                ],
+                videoId: '',
+                videoInfo: {
+                    title: '워크플로우 숙련도 향상 결과물 (예정)',
+                    cameras: '미정',
+                    duration: '측정 예정'
+                }
+            },
+             '6': {
+                id: '6', date: '9월 3주차', status: '계획', goal: '데이터 매니징 앱 개선사항 테스트', location: '미정', duration: '미정',
+                participants: { '참여 인원': '미정' },
+                results: [
+                    { type: 'pending', text: 'UI/UX 개선 피드백 반영 및 버그 수정 확인.' }
+                ],
+                videoId: '',
+                videoInfo: {
+                    title: '데이터 매니징 앱 테스트 결과물 (예정)',
+                    cameras: '미정',
+                    duration: '측정 예정'
+                }
+            }
+        };
+        
+        const statusConfig = {
+            '완료': { color: 'bg-green-500', text: '완료' },
+            '예정': { color: 'bg-blue-500', text: '예정' },
+            '계획': { color: 'bg-gray-400', text: '계획' },
+        };
+
+        function createResultItem(result) {
+            const icons = {
+                issue: `<svg class="w-6 h-6 text-red-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+                improvement: `<svg class="w-6 h-6 text-yellow-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+                decision: `<svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+                pending: `<svg class="w-6 h-6 text-gray-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`
+            };
+            return `<li class="flex items-start">${icons[result.type]}<span class="text-gray-700">${result.text}</span></li>`;
+        }
+        
+        function renderRehearsalDetails(rehearsalId) {
+            const data = rehearsalData[rehearsalId];
+            const detailsEl = document.getElementById('timeline-details');
+            
+            const participantsHtml = Object.entries(data.participants).map(([role, names]) => 
+                `<div class="text-sm"><span class="font-semibold">${role}:</span> ${names}</div>`
+            ).join('');
+
+            const resultsHtml = data.results.map(createResultItem).join('');
+
+            let finalHtml = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">${rehearsalId}차 리허설 (${data.date})</h3>
+                        <div class="space-y-2 text-gray-600">
+                            <p><strong class="text-gray-700">목표:</strong> ${data.goal}</p>
+                            <p><strong class="text-gray-700">장소:</strong> ${data.location}</p>
+                            <p><strong class="text-gray-700">시간:</strong> ${data.duration}</p>
+                        </div>
+                        <h4 class="font-bold text-gray-800 mt-6 mb-2">참여 인원</h4>
+                        <div class="space-y-1 text-gray-600">${participantsHtml}</div>
+                    </div>
+                    <div class="md:col-span-2">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">결과 및 피드백</h3>
+                        <ul class="space-y-3">${resultsHtml}</ul>
+                    </div>
+                </div>
+            `;
+
+            if (data.videoInfo) {
+                const videoContent = data.videoId 
+                    ? `<iframe src="https://www.youtube.com/embed/${data.videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+                    : `<div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500 rounded-lg">영상 준비 중</div>`;
+                
+                finalHtml += `
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">결과물 영상</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="video-container mb-4">
+                                ${videoContent}
+                            </div>
+                            <h4 class="text-md font-bold text-gray-800 mb-3">${rehearsalId}차 리허설: ${data.videoInfo.title}</h4>
+                            <div class="flex items-center text-sm text-gray-600 mb-2">
+                                <svg class="w-5 h-5 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.55a1 1 0 011.45.89V14a1 1 0 01-1.45.89L15 12M4 6h11a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V7a1 1 0 011-1z"></path></svg>
+                                <span>사용 카메라: ${data.videoInfo.cameras}</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <svg class="w-5 h-5 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span>총 작업 소요시간: ${data.videoInfo.duration}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            detailsEl.innerHTML = finalHtml;
+        }
+
+        function generateTimelineNav() {
+            const navEl = document.getElementById('timeline-nav');
+            navEl.innerHTML = '';
+            Object.values(rehearsalData).forEach(item => {
+                const config = statusConfig[item.status];
+                const itemEl = document.createElement('div');
+                itemEl.className = 'timeline-item';
+                itemEl.dataset.id = item.id;
+                itemEl.innerHTML = `
+                    <div class="timeline-dot ${config.color}"></div>
+                    <div class="text-sm text-gray-500">${item.date} - <span class="font-semibold text-gray-700">${config.text}</span></div>
+                    <p class="text-md text-gray-800">${item.goal}</p>
+                `;
+                navEl.appendChild(itemEl);
+            });
+
+            navEl.addEventListener('click', (e) => {
+                const targetItem = e.target.closest('.timeline-item');
+                if (targetItem) {
+                    const currentActive = navEl.querySelector('.active');
+                    if (currentActive) {
+                        currentActive.classList.remove('active', 'text-blue-600');
+                    }
+                    targetItem.classList.add('active', 'text-blue-600');
+                    renderRehearsalDetails(targetItem.dataset.id);
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            generateTimelineNav();
+            const firstItem = document.querySelector('.timeline-item');
+            if (firstItem) {
+                firstItem.classList.add('active', 'text-blue-600');
+                renderRehearsalDetails(firstItem.dataset.id);
+            }
+        });
+    </script>
+</body>
+</html>
+
+
