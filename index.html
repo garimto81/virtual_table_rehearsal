@@ -7,10 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Calm Neutral & Muted Blue -->
-    <!-- Application Structure Plan: 이 애플리케이션은 사용자가 프로젝트의 핵심 성과를 즉시 인지하고, 점진적으로 세부 정보를 탐색할 수 있도록 설계되었습니다. 상단에 핵심 요약(KPI)을 배치하여 주요 결론(현장 편집 방식의 효율성)을 먼저 전달합니다. 그 후, '리허설 경과' 탭 인터페이스를 통해 각 차수의 상세 내용을 선택적으로 볼 수 있게 하여 정보 과부하를 방지합니다. 워크플로우 비교 차트는 텍스트로만 설명된 효율성 차이를 시각적으로 명확하게 보여주어 의사결정의 근거를 강화합니다. 이 구조는 보고서의 연대기적 흐름을 따르면서도, 사용자가 가장 중요하게 생각할 정보에 빠르게 접근할 수 있도록 하여 사용성을 극대화합니다. -->
-    <!-- Visualization & Content Choices: 1. 워크플로우 효율성 비교 -> 목표: 비교 -> 시각화: 가로 막대 차트(Chart.js) -> 상호작용: 툴팁으로 정확한 시간 표시 -> 정당성: '원격 편집'과 '현장 편집'의 총 소요 시간 차이를 직관적으로 보여주어 현장 편집 방식 채택의 타당성을 명확히 전달합니다. 2. 리허설 로그 -> 목표: 정리/탐색 -> 표현 방식: 탭 기반 콘텐츠 섹션(HTML/JS) -> 상호작용: 탭 클릭 시 해당 회차의 상세 정보(목표, 결과, 피드백) 표시 -> 정당성: 여러 회차에 걸친 방대한 텍스트 정보를 깔끔하게 정리하고, 사용자가 원하는 정보에만 집중할 수 있도록 하여 가독성과 탐색 효율을 높입니다. 3. 기본 프로토콜 -> 목표: 정보 전달 -> 표현 방식: 순서도 형태의 HTML/CSS 다이어그램 -> 상호작용: 없음 (정적 정보) -> 정당성: 복잡할 수 있는 프로세스를 단계별 시각적 흐름으로 표현하여 이해를 돕습니다. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -91,13 +87,58 @@
             color: white;
             font-weight: bold;
         }
+        /* Poker Table Styles from the seating simulation */
+        .poker-table {
+            position: relative;
+            width: 280px;
+            height: 160px;
+            background-color: #059669; /* A rich green */
+            border: 10px solid #78350f; /* Wood-like border */
+            border-radius: 80px / 80px; /* Oval shape */
+            margin: 1.5rem auto 0;
+        }
+        .seat {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background-color: #4b5563; /* Dark grey */
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.875rem;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translate(-50%, -50%);
+        }
+        .dealer {
+            background-color: #1f2937; /* Even darker for dealer */
+            width: 60px;
+            height: 28px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+        .player-active {
+            background-color: #2563eb; /* Bright blue for active players */
+            transform: translate(-50%, -50%) scale(1.1);
+            z-index: 10;
+        }
     </style>
 </head>
-<body>
+<body class="bg-gray-100">
     <div class="container mx-auto p-4 md:p-8">
         <header class="text-center mb-10">
             <h1 class="text-4xl font-bold text-gray-800 mb-2">버추얼 테이블 프로젝트</h1>
             <p class="text-lg text-gray-600">리허설 경과 및 성과 대시보드</p>
+            <button id="showSeatingModalBtn" class="mt-4 inline-flex items-center px-5 py-2.5 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-opacity-75 transition-colors text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path fill-rule="evenodd" d="M.458 10C3.732 4.943 9.522 3 10 3s6.268 1.943 9.542 7c-3.274 5.057-9.064 7-9.542 7S3.732 15.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                </svg>
+                헤즈업 좌석 배치 시뮬레이션 보기
+            </button>
         </header>
 
         <main>
@@ -120,7 +161,7 @@
                         <div class="flow-step">
                             <div class="flow-dot">1</div>
                             <h3 class="text-lg font-bold text-gray-800">주요 선수 선정</h3>
-                            <p class="text-gray-600">디렉터가 주목할 만한 선수(Notable Player)를 2~3명 선정합니다.</p>
+                            <p class="text-gray-600">버추얼 테이블 2~3명, 피처 테이블 각 1명씩 총 4~5명 선정하여 시청자 관점에서 주요 선수들에게 집중할 수 있는 환경 마련</p>
                         </div>
                         <div class="flow-step">
                             <div class="flow-dot">2</div>
@@ -185,6 +226,33 @@
             </section>
         </main>
     </div>
+
+    <!-- Seating Arrangement Modal -->
+    <div id="seatingModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-gray-100 rounded-2xl shadow-2xl w-full max-w-7xl h-full max-h-[90vh] flex flex-col transform transition-all duration-300 scale-95 opacity-0" id="seatingModalContent">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-4 border-b border-gray-300">
+                 <h2 class="text-2xl font-bold text-gray-800">헤즈업 좌석 배치 시뮬레이션</h2>
+                <button id="closeSeatingModalBtn" class="text-gray-500 hover:text-gray-800">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="flex-grow p-4 md:p-6 overflow-y-auto">
+                <header class="text-center mb-6">
+                    <p class="text-md text-gray-600">카메라 촬영 테스트를 위한 10가지 무작위 헤즈업 시나리오입니다.</p>
+                    <button id="randomize-button-modal" class="mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition-colors">
+                        핸드 재배치
+                    </button>
+                </header>
+                <main id="seating-grid-modal" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                    <!-- 10개의 좌석 배치 시나리오가 여기에 동적으로 생성됩니다. -->
+                </main>
+            </div>
+        </div>
+    </div>
+
+
     <script>
         const rehearsalData = {
             '1': {
@@ -197,7 +265,6 @@
                 ],
                 videos: [
                     { id: 'KkqwcWT4MF4', title: '초기 테스트 결과물 (메인 앵글)', description: '소니 카메라로 촬영한 메인 영상입니다.' },
-                    
                 ]
             },
             '2': {
@@ -213,26 +280,36 @@
                 ]
             },
             '3': {
-                id: '3', date: '8/29', status: '완료', goal: 'CYPRUS 네트워크 환경(10~20mb) 맞춤 테스트', location: 'GGP 스튜디오', duration: '2시간',
+                id: '3', date: '8/29', status: '완료', goal: 'CYPRUS 현장 네트워크(10~20mb) 환경 테스트', location: 'GGP 스튜디오', duration: '2시간',
                 participants: { '카메라': '에이든, 매튜', '데이터 매니저': '헨리', '후반 편집': '던' },
                 results: [
-                    { type: 'issue', text: '전송 시간이 너무 오래 걸림 (카메라 파일 하나당 25~30분, 700mb).' },
-                    { type: 'issue', text: '데이터 매니징 앱의 UI/UX가 직관적이지 않고 버그 존재. 개선 필요.' },
-                    { type: 'decision', text: '현장 편집 방식으로 신속하게 프로세스를 변경하여 테스트. (콘텐츠 제작 시간 40~50분 → 15~25분으로 단축 성공)' },
-                    { type: 'improvement', text: '현장에 현장 편집자 배정 필요성 추가.' },
-                    { type: 'improvement', text: 'GFX 및 편집 숙련자 필요 (제한 시간 안에 신속하고 실수 없이 빠르게 처리해야 함).' }
+                    { type: 'issue', text: '전송 시간 과다 소요 (700mb 파일 기준 25~30분).' },
+                    { type: 'decision', text: '현장 편집 방식으로 신속하게 프로세스를 변경하여 테스트 → 콘텐츠 제작 시간 40-50분에서 15-25분으로 단축 성공.'},
+                    { type: 'improvement', text: '효율적인 현장 편집을 위해 숙련된 GFX/편집자 배정 필수.'},
+                    { type: 'issue', text: '데이터 매니징 앱의 UI/UX가 직관적이지 않고 버그 존재. 개선 필요.' }
                 ],
                 videos: [
                     { id: 'KEibhwfM8HA', title: '현장 편집 워크플로우 적용 영상', description: '데이터 수집부터 최종 편집까지 현장에서 완료한 첫 결과물입니다. (소요 시간: 약 20분)' }
                 ]
             },
             '4': {
-                id: '4', date: '9/1', status: '예정', goal: '비숙련자 후반 편집 시간 측정', location: 'GGP 스튜디오', duration: '약 2시간',
-                participants: { '카메라': '에이든, 카이', '후반 작업': '레이, 마이크', '데이터 매니저': '미정' },
-                results: [
-                    { type: 'pending', text: '외주 인력 운용 기준 마련을 위한 시간 측정 진행' }
+                id: '4', date: '9/1', status: '완료',
+                goal: [
+                    '후반 비숙련 작업자의 작업 속도 측정',
+                    '액션캠으로 촬영했을때의 화질 검토',
+                    '데이터 매니징 앱의 효율성 검토'
                 ],
-                videos: []
+                location: 'GGP 스튜디오', duration: '1시간 (10핸드 진행)',
+                participants: { '카메라': '에이든, 카이', '데이터 매니징': '헨리', '후반 작업': '마이크' },
+                results: [
+                     { type: 'decision', text: '비숙련자 기준 총 작업 시간 24분 달성 (편집 7분, GFX 10분).' },
+                     { type: 'improvement', text: '향후 안정적인 운영을 위해 전송시간 포함 12분 내 본사 전달 목표 설정 필요.' },
+                     { type: 'issue', text: '오즈모 포켓 3: 사용성은 뛰어나지만, 광각에서는 양호한 화질을 보이나 줌인 시 화질 저하가 심하고 단조로운 화면을 제공하여 메인 카메라 활용 여부는 추가 검토가 필요합니다.'},
+                     { type: 'issue', text: '데이터 매니징 앱: 작업자 미숙지로 인한 데이터 오입력 발생. 사용자 교육 필요성 확인.'}
+                ],
+                videos: [
+                    { id: '3BwVctioVbw', title: '4차 리허설 결과물 (오즈모 포켓 3 테스트)', description: '카메라: 2대, 작업 시간: 24분, 결과물: 34초' }
+                ]
             },
             '5': {
                 id: '5', date: '9월 2주차', status: '계획', goal: '현장 편집 워크플로우 숙련도 향상', location: '미정', duration: '미정',
@@ -242,7 +319,7 @@
                 ],
                 videos: []
             },
-             '6': {
+            '6': {
                 id: '6', date: '9월 3주차', status: '계획', goal: '데이터 매니징 앱 개선사항 테스트', location: '미정', duration: '미정',
                 participants: { '참여 인원': '미정' },
                 results: [
@@ -258,7 +335,7 @@
             '계획': { color: 'bg-gray-400', text: '계획' },
         };
 
-        function createResultItem(result) {
+        function createResultItem(result, status) {
             const icons = {
                 issue: `<svg class="w-6 h-6 text-red-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
                 improvement: `<svg class="w-6 h-6 text-yellow-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
@@ -272,18 +349,51 @@
             const data = rehearsalData[rehearsalId];
             const detailsEl = document.getElementById('timeline-details');
             
+            const goalHtml = Array.isArray(data.goal)
+                ? `<ul class="list-disc list-inside space-y-1">${data.goal.map(g => `<li>${g}</li>`).join('')}</ul>`
+                : data.goal;
+
             const participantsHtml = Object.entries(data.participants).map(([role, names]) => 
                 `<div class="text-sm"><span class="font-semibold">${role}:</span> ${names}</div>`
             ).join('');
+            
+            let resultsContentHtml = '';
+            if (rehearsalId === '4') {
+                resultsContentHtml = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-200 text-center">
+                            <div class="flex items-center justify-center text-green-600 mb-2">
+                                <svg class="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <h4 class="text-lg font-bold">총 작업 시간</h4>
+                            </div>
+                            <p class="text-4xl font-bold text-green-700">24<span class="text-2xl font-medium">분</span></p>
+                            <p class="text-sm text-gray-500 mt-1">(편집 7분, GFX 10분)</p>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200 text-center">
+                            <div class="flex items-center justify-center text-yellow-700 mb-2">
+                                 <svg class="w-8 h-8 mr-2 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                                <h4 class="text-lg font-bold">향후 목표</h4>
+                            </div>
+                            <p class="text-4xl font-bold text-yellow-800">12<span class="text-2xl font-medium">분</span></p>
+                            <p class="text-sm text-gray-500 mt-1">(전송시간 포함 본사 전달)</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-3 mt-6 pt-4 border-t">
+                        ${data.results.slice(2).map(res => createResultItem(res, data.status)).join('')}
+                    </ul>
+                `;
+            } else {
+                 resultsContentHtml = `<ul class="space-y-3">${data.results.map(res => createResultItem(res, data.status)).join('')}</ul>`;
+            }
 
-            const resultsHtml = data.results.map(createResultItem).join('');
+            const resultTitle = data.status === '예정' ? '예상 결과 및 피드백' : '결과 및 피드백';
 
             let finalHtml = `
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="md:col-span-1">
                         <h3 class="text-xl font-bold text-gray-800 mb-3">${rehearsalId}차 리허설 (${data.date})</h3>
                         <div class="space-y-2 text-gray-600">
-                            <p><strong class="text-gray-700">목표:</strong> ${data.goal}</p>
+                            <div><strong class="text-gray-700">목표:</strong><div class="mt-1 pl-1">${goalHtml}</div></div>
                             <p><strong class="text-gray-700">장소:</strong> ${data.location}</p>
                             <p><strong class="text-gray-700">시간:</strong> ${data.duration}</p>
                         </div>
@@ -291,8 +401,8 @@
                         <div class="space-y-1 text-gray-600">${participantsHtml}</div>
                     </div>
                     <div class="md:col-span-2">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">결과 및 피드백</h3>
-                        <ul class="space-y-3">${resultsHtml}</ul>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">${resultTitle}</h3>
+                        <div>${resultsContentHtml}</div>
                     </div>
                 </div>
             `;
@@ -300,7 +410,7 @@
             if (data.videos && data.videos.length > 0) {
                 const videosHtml = data.videos.map(video => {
                     const videoContent = video.id 
-                        ? `<iframe src="https://www.youtube.com/embed/${video.id}?rel=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>`
+                        ? `<iframe src="https://www.youtube.com/embed/${video.id}?controls=1&rel=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>`
                         : `<div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500 rounded-lg">영상 ID가 올바르지 않습니다.</div>`;
                     
                     return `
@@ -343,10 +453,17 @@
                 const itemEl = document.createElement('div');
                 itemEl.className = 'timeline-item';
                 itemEl.dataset.id = item.id;
+                const goalText = Array.isArray(item.goal) ? item.goal[0] : item.goal;
                 itemEl.innerHTML = `
                     <div class="timeline-dot ${config.color}"></div>
-                    <div class="text-sm text-gray-500">${item.date} - <span class="font-semibold text-gray-700">${config.text}</span></div>
-                    <p class="text-md text-gray-800">${item.goal}</p>
+                     <div class="flex items-center gap-2 mb-1">
+                        <div class="flex items-center bg-gray-200 rounded-full px-2 py-0.5">
+                            <svg class="w-4 h-4 text-gray-600 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <time class="text-xs font-bold text-gray-700">${item.date}</time>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-600">${config.text}</span>
+                    </div>
+                    <p class="text-md text-gray-800">${goalText}</p>
                 `;
                 navEl.appendChild(itemEl);
             });
@@ -366,13 +483,146 @@
         
         document.addEventListener('DOMContentLoaded', () => {
             generateTimelineNav();
-            const firstItem = document.querySelector('.timeline-item');
-            if (firstItem) {
-                firstItem.classList.add('active', 'text-blue-600');
-                renderRehearsalDetails(firstItem.dataset.id);
+            
+            const today = new Date('2025-09-01T00:00:00'); // Set a fixed 'today' for consistency
+
+            function parseDate(dateStr) {
+                if (dateStr.includes('/')) {
+                    const [month, day] = dateStr.split('/');
+                    return new Date(`2025-${month}-${day}`);
+                }
+                if (dateStr.includes('주차')) {
+                    const month = parseInt(dateStr.match(/(\d+)월/)[1]);
+                    const week = parseInt(dateStr.match(/(\d+)주차/)[1]);
+                    const day = (week - 1) * 7 + 1;
+                    return new Date(`2025-${month}-${day}`);
+                }
+                return null;
             }
+
+            let closestRehearsalId = null;
+            let minDiff = Infinity;
+
+            Object.values(rehearsalData).forEach(item => {
+                const itemDate = parseDate(item.date);
+                if (itemDate) {
+                    const diff = Math.abs(itemDate.getTime() - today.getTime());
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        closestRehearsalId = item.id;
+                    }
+                }
+            });
+
+            const initialItemId = closestRehearsalId || '1';
+            const initialItemEl = document.querySelector(`.timeline-item[data-id='${initialItemId}']`);
+
+            if (initialItemEl) {
+                initialItemEl.classList.add('active', 'text-blue-600');
+                renderRehearsalDetails(initialItemEl.dataset.id);
+            }
+            
+            // --- Seating Modal Logic ---
+            const modal = document.getElementById('seatingModal');
+            const modalContent = document.getElementById('seatingModalContent');
+            const showBtn = document.getElementById('showSeatingModalBtn');
+            const closeBtn = document.getElementById('closeSeatingModalBtn');
+            const randomizeBtnModal = document.getElementById('randomize-button-modal');
+            const gridContainerModal = document.getElementById('seating-grid-modal');
+
+            const numPlayerSeats = 9;
+            const tableWidth = 280;
+            const tableHeight = 160;
+            const players = Array.from({ length: numPlayerSeats }, (_, i) => i + 1);
+
+            function shuffleArray(array) {
+                const newArray = [...array];
+                for (let i = newArray.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+                }
+                return newArray;
+            }
+
+            function generateScenarios() {
+                const scenarios = [];
+                for (let i = 0; i < 10; i++) {
+                    const shuffledPlayers = shuffleArray(players);
+                    scenarios.push([shuffledPlayers[0], shuffledPlayers[1]]);
+                }
+                return scenarios;
+            }
+
+            function renderModalScenarios(seatingScenarios) {
+                gridContainerModal.innerHTML = '';
+                seatingScenarios.forEach((activePlayers, index) => {
+                    const handNumber = index + 1;
+                    const scenarioCard = document.createElement('div');
+                    scenarioCard.className = 'bg-white p-4 rounded-xl shadow-md';
+                    scenarioCard.innerHTML = `<h3 class="text-xl font-bold text-center text-gray-700">Hand ${handNumber}</h3>`;
+                    
+                    const tableContainer = document.createElement('div');
+                    tableContainer.className = 'poker-table';
+
+                    const totalArc = 270; 
+                    const startAngle = -225;
+                    const angleStep = totalArc / (numPlayerSeats - 1);
+
+                    for (let i = 0; i < numPlayerSeats; i++) {
+                        const seat = document.createElement('div');
+                        const seatNumber = i + 1;
+                        
+                        const angleDegrees = startAngle + (i * angleStep);
+                        const angleRadians = angleDegrees * (Math.PI / 180);
+                        
+                        const x = (tableWidth / 2) * Math.cos(angleRadians);
+                        const y = (tableHeight / 2) * Math.sin(angleRadians);
+                        
+                        seat.className = 'seat';
+                        seat.textContent = seatNumber;
+                        
+                        if (activePlayers.includes(seatNumber)) {
+                            seat.classList.add('player-active');
+                        }
+                        
+                        seat.style.left = `calc(50% + ${x}px)`;
+                        seat.style.top = `calc(50% + ${y}px)`;
+                        tableContainer.appendChild(seat);
+                    }
+
+                    const dealer = document.createElement('div');
+                    dealer.className = 'seat dealer';
+                    dealer.textContent = 'DEALER';
+                    dealer.style.left = '50%';
+                    dealer.style.top = '100%';
+                    tableContainer.appendChild(dealer);
+                    
+                    scenarioCard.appendChild(tableContainer);
+                    gridContainerModal.appendChild(scenarioCard);
+                });
+            }
+            
+            showBtn.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                   modalContent.classList.remove('scale-95', 'opacity-0');
+                }, 10); // Start transition
+                renderModalScenarios(generateScenarios());
+            });
+
+            closeBtn.addEventListener('click', () => {
+                 modalContent.classList.add('scale-95', 'opacity-0');
+                 setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300); // Wait for transition to finish
+            });
+
+            randomizeBtnModal.addEventListener('click', () => {
+                renderModalScenarios(generateScenarios());
+            });
         });
     </script>
 </body>
 </html>
+
 
