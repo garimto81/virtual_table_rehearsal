@@ -185,7 +185,6 @@
             </section>
         </main>
     </div>
-
     <script>
         const rehearsalData = {
             '1': {
@@ -196,12 +195,10 @@
                     { type: 'improvement', text: '후반 편집 의문점 해결을 위한 현장팀과의 소통 채널 강화 필요.' },
                     { type: 'improvement', text: '2카메라 운영 시, 명확한 사전 역할 분담 및 동선 합의 필수.' }
                 ],
-                videoId: 'your_video_id_1',
-                videoInfo: {
-                    title: '초기 테스트 결과물',
-                    cameras: '2대',
-                    duration: '확인 필요'
-                }
+                videos: [
+                    { id: 'KkqwcWT4MF4', title: '초기 테스트 결과물 (메인 앵글)', description: '소니 카메라로 촬영한 메인 영상입니다.' },
+                    
+                ]
             },
             '2': {
                 id: '2', date: '8/28', status: '완료', goal: '프로세스 정립 및 2카메라 테스트', location: 'GGP 스튜디오', duration: '2시간',
@@ -211,26 +208,23 @@
                     { type: 'issue', text: '슬랙을 통한 데이터 전송 방식 비효율적.' },
                     { type: 'issue', text: '노트북+구글 시트 방식의 데이터 매니징은 현장에 부적합. 모바일 기반 방식 모색 필요.' }
                 ],
-                videoId: 'your_video_id_2',
-                videoInfo: {
-                    title: '2카메라 테스트 결과물',
-                    cameras: '2대',
-                    duration: '확인 필요'
-                }
+                videos: [
+                    { id: 'JHBz5SyzEwM', title: '2카메라 테스트 영상', description: '프로덕션용 카메라 2대를 사용하여 동시 촬영한 결과물입니다.' }
+                ]
             },
             '3': {
-                id: '3', date: '8/29', status: '완료', goal: '프로세스 정립 2차 및 워크플로우 최적화', location: 'GGP 스튜디오', duration: '2시간',
+                id: '3', date: '8/29', status: '완료', goal: 'CYPRUS 네트워크 환경(10~20mb) 맞춤 테스트', location: 'GGP 스튜디오', duration: '2시간',
                 participants: { '카메라': '에이든, 매튜', '데이터 매니저': '헨리', '후반 편집': '던' },
                 results: [
-                    { type: 'decision', text: '현장 편집 방식 채택. (콘텐츠 제작 시간 40-50분 → 15-25분 단축)' },
-                    { type: 'issue', text: '데이터 매니징 앱의 UI/UX가 직관적이지 않고 버그 존재. 개선 필요.' }
+                    { type: 'issue', text: '전송 시간이 너무 오래 걸림 (카메라 파일 하나당 25~30분, 700mb).' },
+                    { type: 'issue', text: '데이터 매니징 앱의 UI/UX가 직관적이지 않고 버그 존재. 개선 필요.' },
+                    { type: 'decision', text: '현장 편집 방식으로 신속하게 프로세스를 변경하여 테스트. (콘텐츠 제작 시간 40~50분 → 15~25분으로 단축 성공)' },
+                    { type: 'improvement', text: '현장에 현장 편집자 배정 필요성 추가.' },
+                    { type: 'improvement', text: 'GFX 및 편집 숙련자 필요 (제한 시간 안에 신속하고 실수 없이 빠르게 처리해야 함).' }
                 ],
-                videoId: 'your_video_id_3',
-                videoInfo: {
-                    title: '현장 편집 방식 결과물',
-                    cameras: '2대',
-                    duration: '약 20분'
-                }
+                videos: [
+                    { id: 'KEibhwfM8HA', title: '현장 편집 워크플로우 적용 영상', description: '데이터 수집부터 최종 편집까지 현장에서 완료한 첫 결과물입니다. (소요 시간: 약 20분)' }
+                ]
             },
             '4': {
                 id: '4', date: '9/1', status: '예정', goal: '비숙련자 후반 편집 시간 측정', location: 'GGP 스튜디오', duration: '약 2시간',
@@ -238,12 +232,7 @@
                 results: [
                     { type: 'pending', text: '외주 인력 운용 기준 마련을 위한 시간 측정 진행' }
                 ],
-                videoId: '',
-                videoInfo: {
-                    title: '비숙련자 편집 테스트 결과물 (예정)',
-                    cameras: '2대',
-                    duration: '측정 예정'
-                }
+                videos: []
             },
             '5': {
                 id: '5', date: '9월 2주차', status: '계획', goal: '현장 편집 워크플로우 숙련도 향상', location: '미정', duration: '미정',
@@ -251,12 +240,7 @@
                 results: [
                     { type: 'pending', text: '외주 인력 교육 및 비상 상황 대비 훈련.' }
                 ],
-                videoId: '',
-                videoInfo: {
-                    title: '워크플로우 숙련도 향상 결과물 (예정)',
-                    cameras: '미정',
-                    duration: '측정 예정'
-                }
+                videos: []
             },
              '6': {
                 id: '6', date: '9월 3주차', status: '계획', goal: '데이터 매니징 앱 개선사항 테스트', location: '미정', duration: '미정',
@@ -264,12 +248,7 @@
                 results: [
                     { type: 'pending', text: 'UI/UX 개선 피드백 반영 및 버그 수정 확인.' }
                 ],
-                videoId: '',
-                videoInfo: {
-                    title: '데이터 매니징 앱 테스트 결과물 (예정)',
-                    cameras: '미정',
-                    duration: '측정 예정'
-                }
+                videos: []
             }
         };
         
@@ -318,27 +297,37 @@
                 </div>
             `;
 
-            if (data.videoInfo) {
-                const videoContent = data.videoId 
-                    ? `<iframe src="https://www.youtube.com/embed/${data.videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
-                    : `<div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500 rounded-lg">영상 준비 중</div>`;
+            if (data.videos && data.videos.length > 0) {
+                const videosHtml = data.videos.map(video => {
+                    const videoContent = video.id 
+                        ? `<iframe src="https://www.youtube.com/embed/${video.id}?controls=0&rel=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+                        : `<div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500 rounded-lg">영상 ID가 올바르지 않습니다.</div>`;
+                    
+                    return `
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="video-container mb-3">
+                                ${videoContent}
+                            </div>
+                            <h4 class="text-md font-bold text-gray-800">${video.title}</h4>
+                            ${video.description ? `<p class="text-sm text-gray-600 mt-1">${video.description}</p>` : ''}
+                        </div>
+                    `;
+                }).join('');
                 
                 finalHtml += `
                     <div class="mt-6 pt-6 border-t border-gray-200">
                         <h3 class="text-xl font-bold text-gray-800 mb-4">결과물 영상</h3>
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <div class="video-container mb-4">
-                                ${videoContent}
-                            </div>
-                            <h4 class="text-md font-bold text-gray-800 mb-3">${rehearsalId}차 리허설: ${data.videoInfo.title}</h4>
-                            <div class="flex items-center text-sm text-gray-600 mb-2">
-                                <svg class="w-5 h-5 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.55a1 1 0 011.45.89V14a1 1 0 01-1.45.89L15 12M4 6h11a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V7a1 1 0 011-1z"></path></svg>
-                                <span>사용 카메라: ${data.videoInfo.cameras}</span>
-                            </div>
-                            <div class="flex items-center text-sm text-gray-600">
-                                <svg class="w-5 h-5 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <span>총 작업 소요시간: ${data.videoInfo.duration}</span>
-                            </div>
+                        <div class="space-y-6">
+                            ${videosHtml}
+                        </div>
+                    </div>
+                `;
+            } else if (data.hasOwnProperty('videos')) {
+                finalHtml += `
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">결과물 영상</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center text-gray-500 min-h-[120px]">
+                            <p>공유된 영상이 아직 없습니다.</p>
                         </div>
                     </div>
                 `;
@@ -386,5 +375,4 @@
     </script>
 </body>
 </html>
-
 
