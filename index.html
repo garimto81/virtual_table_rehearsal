@@ -130,8 +130,8 @@
 <body class="bg-gray-100">
     <div class="container mx-auto p-4 md:p-8">
         <header class="text-center mb-10">
-            <h1 class="text-4xl font-bold text-gray-800 mb-2">버추얼 테이블 프로젝트</h1>
-            <p class="text-lg text-gray-600">리허설 경과 및 성과 대시보드</p>
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">버추얼 테이블 리허설 보고서</h1>
+            <p class="text-lg text-gray-600">리허설 경과 및 성과</p>
             <button id="showSeatingModalBtn" class="mt-4 inline-flex items-center px-5 py-2.5 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-opacity-75 transition-colors text-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
@@ -311,15 +311,31 @@
                 ]
             },
             '5': {
-                id: '5', date: '9월 2주차', status: '계획', goal: '현장 편집 워크플로우 숙련도 향상', location: '미정', duration: '미정',
+                id: '5', date: '9/2', status: '완료', goal: '버추얼 테이블 최고의 퀄리티 촬영 (2카메라)', location: 'GGP 스튜디오', duration: '1시간 (6핸드 진행) / 결과물: 4핸드',
+                participants: { '스위처 / 카메라 콜': '에이든', '카메라': '카이, 매튜', 'GFX': '제드', '후반 작업': '에이든' },
+                results: [
+                    { type: 'decision', text: '카메라 2대로 기존의 피처 테이블 촬영에 비교해서 가장 자연스러운 퀄리티의 촬영 결과물 도출 완료.' },
+                    { type: 'improvement', text: '카메라 콜, 연출, 샷 리스트, 프로세스는 최종 컨펌 후 진행 예정.' },
+                    { type: 'improvement', category: 'GFX', text: '작업 방식: GFX 작업이 필요한 핸드는 촬영자(에이든)가 현장에서 후반 작업까지 직접 처리하는 방식이 현재 가장 효율적.' },
+                    { type: 'improvement', category: 'GFX', text: '작업 속도: 가장 빠른 GFX 작업은 프리플랍부터 액션을 순서대로 입력하는 방식임.' }
+                ],
+                videos: [
+                    { id: 'qvXsMSP8NVA', title: '5차 리허설 결과물 (핸드 1)', description: '최고 퀄리티 촬영 테스트 영상입니다.' },
+                    { id: 'q1517ej5SjA', title: '5차 리허설 결과물 (핸드 2 - On the Flop)', description: '최고 퀄리티 촬영 테스트 영상입니다.' },
+                    { id: '7kJesbsSj-4', title: '5차 리허설 결과물 (핸드 3 - On the River)', description: '최고 퀄리티 촬영 테스트 영상입니다.' },
+                    { id: 'dqPpZfGAyAA', title: '5차 리허설 결과물 (핸드 4 - All-In)', description: '최고 퀄리티 촬영 테스트 영상입니다.' }
+                ]
+            },
+            '6': {
+                id: '6', date: '9월 2주차', status: '계획', goal: '현장 편집 워크플로우 숙련도 향상', location: '미정', duration: '미정',
                 participants: { '참여 인원': '미정' },
                 results: [
                     { type: 'pending', text: '외주 인력 교육 및 비상 상황 대비 훈련.' }
                 ],
                 videos: []
             },
-            '6': {
-                id: '6', date: '9월 3주차', status: '계획', goal: '데이터 매니징 앱 개선사항 테스트', location: '미정', duration: '미정',
+            '7': {
+                id: '7', date: '9월 3주차', status: '계획', goal: '데이터 매니징 앱 개선사항 테스트', location: '미정', duration: '미정',
                 participants: { '참여 인원': '미정' },
                 results: [
                     { type: 'pending', text: 'UI/UX 개선 피드백 반영 및 버그 수정 확인.' }
@@ -401,7 +417,25 @@
                         </ul>
                     </div>
                 `;
-            } else {
+            } else if (rehearsalId === '5') {
+                const gfxResults = data.results.filter(r => r.category === 'GFX');
+                const otherResults = data.results.filter(r => r.category !== 'GFX');
+                const cleanedGfxResults = gfxResults.map(r => ({...r, text: r.text.replace('GFX ', '') }));
+
+                resultsContentHtml = `
+                    <h4 class="text-md font-bold text-gray-700 mb-3">종합 피드백</h4>
+                    <ul class="space-y-3 mb-6">
+                        ${otherResults.map(res => createResultItem(res, data.status)).join('')}
+                    </ul>
+                    <div class="mt-4 pt-4 border-t">
+                        <h4 class="text-md font-bold text-gray-700 mb-3">GFX 피드백</h4>
+                        <ul class="space-y-3">
+                            ${cleanedGfxResults.map(res => createResultItem(res, data.status)).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            else {
                  resultsContentHtml = `<ul class="space-y-3">${data.results.map(res => createResultItem(res, data.status)).join('')}</ul>`;
             }
 
@@ -430,7 +464,7 @@
                 const videosHtml = data.videos.map(video => {
                     const videoContent = video.id 
                         ? `<iframe src="https://www.youtube.com/embed/${video.id}?controls=1&rel=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>`
-                        : `<div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500 rounded-lg">영상 ID가 올바르지 않습니다.</div>`;
+                        : `<div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500 rounded-lg">영상 준비 중</div>`;
                     
                     return `
                         <div class="bg-gray-50 p-4 rounded-lg">
@@ -503,18 +537,18 @@
         document.addEventListener('DOMContentLoaded', () => {
             generateTimelineNav();
             
-            const today = new Date('2025-09-01T00:00:00'); // Set a fixed 'today' for consistency
+            const today = new Date('2025-09-02T00:00:00'); // Set a fixed 'today' for consistency
 
             function parseDate(dateStr) {
                 if (dateStr.includes('/')) {
                     const [month, day] = dateStr.split('/');
-                    return new Date(`2025-${month}-${day}`);
+                    return new Date(`2025-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
                 }
                 if (dateStr.includes('주차')) {
                     const month = parseInt(dateStr.match(/(\d+)월/)[1]);
                     const week = parseInt(dateStr.match(/(\d+)주차/)[1]);
                     const day = (week - 1) * 7 + 1;
-                    return new Date(`2025-${month}-${day}`);
+                    return new Date(`2025-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`);
                 }
                 return null;
             }
