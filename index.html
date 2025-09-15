@@ -171,31 +171,16 @@
                         <div class="flow-step">
                             <div class="flow-dot">3</div>
                             <h3 class="text-lg font-bold text-gray-800">데이터 수집 및 촬영</h3>
-                            <p class="text-gray-600">데이터 매니저는 아래 항목들을 포함한 핸드의 상세 데이터를 수집합니다.</p>
-                            <div class="mt-2 pl-4 grid grid-cols-1 md:grid-cols-2 gap-x-8">
-                                <div>
-                                    <h4 class="font-semibold text-gray-700">핸드 데이터</h4>
-                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-500">
-                                        <li>보드 카드</li>
-                                        <li>플레이어 카드</li>
-                                        <li>플레이어 액션 및 액션별 칩</li>
-                                        <li>팟 사이즈 / 칩 스택</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-700 mt-2 md:mt-0">편집 데이터</h4>
-                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-500">
-                                        <li>노터블 플레이어</li>
-                                        <li>인점 가이드</li>
-                                        <li>카드 오픈 여부 (미스터리 핸드 스타일)</li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <p class="text-gray-600">데이터 매니저는 핸드 데이터를 수집하며, 촬영팀은 콘텐츠 유형에 따라 목표를 분리하여 촬영합니다.</p>
+                            <ul class="list-disc list-inside mt-2 space-y-2 text-gray-500 pl-4">
+                                <li><b>버추얼 테이블:</b> 모든 플레이어를 담는 구도를 확보합니다. (1~2개 카메라로 촬영하는 피처 테이블 방식)</li>
+                                <li><b>소프트 콘텐츠:</b> 지루한 샷을 피하고 콘텐츠 퀄리티에 집중하여 전체 프로덕션의 환기 역할을 담당합니다.</li>
+                             </ul>
                         </div>
                         <div class="flow-step">
                             <div class="flow-dot">4</div>
-                            <h3 class="text-lg font-bold text-gray-800">데이터 정리</h3>
-                            <p class="text-gray-600">촬영 완료 후, 데이터 매니저는 촬영 파일명을 데이터 시트에 정확히 기록합니다.</p>
+                            <h3 class="text-lg font-bold text-gray-800">데이터 정리 및 관리</h3>
+                            <p class="text-gray-600">촬영 완료 후, 데이터 매니저는 앱 커스터마이징을 통해 부하를 분산하고, 정확성보다는 수집 자체에 집중하여 데이터 누락을 방지합니다.</p>
                         </div>
                          <div class="flow-step">
                             <div class="flow-dot">5</div>
@@ -205,21 +190,22 @@
                          <div class="flow-step">
                             <div class="flow-dot">6</div>
                             <h3 class="text-lg font-bold text-gray-800">그래픽 제작 및 컷 편집 (병렬 진행)</h3>
-                            <p class="text-gray-600">검증 완료 후, 아래 작업들이 동시에 진행됩니다.</p>
-                            <ul class="list-disc list-inside mt-2 space-y-1 text-gray-500 pl-4">
-                                <li>포커 GUI 그래픽 생성</li>
-                                <li>컷 편집 (복수 캠의 경우)</li>
-                            </ul>
+                            <p class="text-gray-600">검증 완료 후, 소프트 콘텐츠와 버추얼 테이블 작업을 분리하여 과부하를 방지하며 병렬로 진행합니다.</p>
                         </div>
                         <div class="flow-step">
                             <div class="flow-dot">7</div>
                             <h3 class="text-lg font-bold text-gray-800">최종 편집</h3>
-                             <p class="text-gray-600">영상에 포커 GUI 그래픽을 삽입하고, 인/아웃점을 편집합니다.</p>
+                             <p class="text-gray-600">영상에 포커 GUI 그래픽을 삽입하고, 인/아웃점을 편집합니다. 장비 성능 저하에 대비한 업그레이드가 필요할 수 있습니다.</p>
                         </div>
                          <div class="flow-step">
                             <div class="flow-dot">8</div>
                             <h3 class="text-lg font-bold text-gray-800">콘텐츠 추출 및 전송</h3>
                              <p class="text-gray-600">최종 완성된 콘텐츠를 추출하여 한국으로 전송합니다.</p>
+                        </div>
+                        <div class="flow-step">
+                            <div class="flow-dot">9</div>
+                            <h3 class="text-lg font-bold text-gray-800">아카이빙</h3>
+                             <p class="text-gray-600">최종 작업물 외에, 버추얼 테이블에서 사용되지 않은 핸드 영상도 별도의 '아카이빙용' 보관함에 저장하여 데이터를 관리합니다.</p>
                         </div>
                     </div>
                 </div>
@@ -331,17 +317,19 @@
                 goal: '스탭들의 버추얼 테이블 경험 및 현장 감 파악',
                 location: '뉴스톤 강남점',
                 duration: '5시간 (20:00 ~ 01:00) / VT 17개, 소프트 콘텐츠 5개 촬영',
-                participants: {},
+                participants: { '호스트': '트레이', '메인 카메라': '레오', '서브 카메라 / 편집': '에이든', '데이터 매니징': '헨리' },
+                key_players: ['DAVID', 'RAY', 'SOYEA', 'SOHEE', 'SHAHINA'],
                 results: [
-                    { type: 'issue', text: '약 1시간 작업 후 장비 성능 저하가 심하게 발생함 -> 장비 업그레이드 필요' },
-                    { type: 'improvement', text: '프로세스 분리: 소프트 콘텐츠(재작업 多)와 버추얼 테이블 작업을 분리하여 과부하 방지 필요.' },
-                    { type: 'improvement', text: '아카이빙: 사용되지 않은 핸드도 아카이빙용으로 별도 저장하는 프로세스 추가.' },
-                    { type: 'improvement', text: '촬영 목표 분리 (소프트 콘텐츠): 지루한 샷을 피하고 콘텐츠 퀄리티에 집중.' },
-                    { type: 'improvement', text: '촬영 목표 분리 (버추얼 테이블): 모든 플레이어를 담는 촬영 구도 확보.' },
-                    { type: 'issue', text: '데이터 매니징 부하: 데이터가 몰리는 경우를 대비해 사전 부하 분산 작업 필요.' },
-                    { type: 'improvement', text: '데이터 매니징 개선 (칩 스택): 핸드포핸드 단계에서 조정 가능하도록 프로세스 변경.' },
-                    { type: 'improvement', text: '데이터 매니징 개선 (핸드 로거): 담당자(Henry) 전용으로 커스터마이징.' },
-                    { type: 'improvement', text: '데이터 매니징 개선 (수집): 정확성보다 수집 자체에 집중하여 데이터 누락 방지.' }
+                    
+                    { type: 'improvement', category: '촬영', text: '소프트 콘텐츠 목표: 지루한 샷을 피하고 콘텐츠 퀄리티에 집중 -> 전체 프로덕션 콘텐츠에서 환기 역할을 담당.' },
+                    { type: 'improvement', category: '촬영', text: '버추얼 테이블 목표: 모든 플레이어를 담는 촬영 구도 확보 -> 1~2개의 카메라로 촬영하는 피처 테이블.' },
+                    { type: 'improvement', category: '데이터 매니징', text: '핸드 로거는 담당자(Henry) 전용으로 커스터마이징.' },
+                    { type: 'issue', category: '데이터 매니징', text: '데이터가 몰리는 경우를 대비해 사전 부하 분산 작업 필요 -> 앱 수정 개발' },
+                    { type: 'improvement', category: '데이터 매니징', text: '정확성보다 수집 자체에 집중하여 데이터 누락 방지.' },
+                    
+                    { type: 'improvement', category: '촬영', text: '프로세스 분리: 소프트 콘텐츠(재작업 多)와 버추얼 테이블 작업을 분리하여 과부하 방지 필요.' },
+                    { type: 'improvement', category: '편집', text: '아카이빙: 사용되지 않은 핸드도 아카이빙용으로 별도 저장하는 프로세스 추가.' },
+                    { type: 'issue', category: '편집', text: '약 1시간 작업 후 장비 성능 저하가 심하게 발생함 -> 장비 업그레이드 필요.' }
                 ],
                 cloudinary_videos: [
                     { url: 'https://res.cloudinary.com/dbr6hutiy/video/upload/v1726372138/VT016_SOYE_DAVID_win_9s9d_n17ii7', name: 'VT016_SOYE_DAVID_win_9s9d_n17ii7', description: 'DAVID vs SOYEA 탈락 신'},
@@ -395,6 +383,14 @@
                   ).join('')
                 : '<div class="text-sm text-gray-500">참여 인원 정보가 없습니다.</div>';
             
+            let keyPlayersHtml = '';
+            if (data.key_players) {
+                keyPlayersHtml = `
+                    <h4 class="font-bold text-gray-800 mt-6 mb-2">키 플레이어</h4>
+                    <div class="text-sm text-gray-600">${data.key_players.join(', ')}</div>
+                `;
+            }
+
             let resultsContentHtml = '';
             if (rehearsalId === '4') {
                 resultsContentHtml = `
@@ -440,25 +436,47 @@
                         </ul>
                     </div>
                 `;
-            } else if (rehearsalId === '5') {
-                const gfxResults = data.results.filter(r => r.category === 'GFX');
-                const otherResults = data.results.filter(r => r.category !== 'GFX');
-                const cleanedGfxResults = gfxResults.map(r => ({...r, text: r.text.replace('GFX ', '') }));
+            } else if (rehearsalId === '5' || rehearsalId === '6') {
+                const categories = ['촬영', '데이터 매니징', '편집'];
+                const categorizedResults = data.results.reduce((acc, result) => {
+                    const category = result.category || '기타';
+                    if (!acc[category]) acc[category] = [];
+                    acc[category].push(result);
+                    return acc;
+                }, {});
 
-                resultsContentHtml = `
-                    <h4 class="text-md font-bold text-gray-700 mb-3">종합 피드백</h4>
-                    <ul class="space-y-3 mb-6">
-                        ${otherResults.map(res => createResultItem(res, data.status)).join('')}
-                    </ul>
-                    <div class="mt-4 pt-4 border-t">
-                        <h4 class="text-md font-bold text-gray-700 mb-3">GFX 피드백</h4>
+                if(rehearsalId === '5'){
+                     categorizedResults['GFX'] = categorizedResults['GFX'].map(r => ({...r, text: r.text.replace('GFX ', '') }));
+                }
+
+                resultsContentHtml = Object.entries(categorizedResults).map(([category, results]) => `
+                    <div class="pt-4 first:pt-0 first:border-none border-t">
+                        <h4 class="text-md font-bold text-gray-700 mb-3">${category} 피드백</h4>
                         <ul class="space-y-3">
-                            ${cleanedGfxResults.map(res => createResultItem(res, data.status)).join('')}
+                            ${results.map(res => createResultItem(res, data.status)).join('')}
                         </ul>
                     </div>
-                `;
-            }
-            else {
+                `).join('');
+                
+                 if(rehearsalId === '5'){
+                     const otherResults = data.results.filter(r => r.category !== 'GFX');
+                     const gfxResults = data.results.filter(r => r.category === 'GFX');
+                     const cleanedGfxResults = gfxResults.map(r => ({...r, text: r.text.replace('GFX ', '') }));
+                     resultsContentHtml = `
+                        <h4 class="text-md font-bold text-gray-700 mb-3">종합 피드백</h4>
+                        <ul class="space-y-3 mb-6">
+                            ${otherResults.map(res => createResultItem(res, data.status)).join('')}
+                        </ul>
+                        <div class="mt-4 pt-4 border-t">
+                            <h4 class="text-md font-bold text-gray-700 mb-3">GFX 피드백</h4>
+                            <ul class="space-y-3">
+                                ${cleanedGfxResults.map(res => createResultItem(res, data.status)).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+
+            } else {
                  resultsContentHtml = `<ul class="space-y-3">${data.results.map(res => createResultItem(res, data.status)).join('')}</ul>`;
             }
 
@@ -475,6 +493,7 @@
                         </div>
                         <h4 class="font-bold text-gray-800 mt-6 mb-2">참여 인원</h4>
                         <div class="space-y-1 text-gray-600">${participantsHtml}</div>
+                        ${keyPlayersHtml}
                     </div>
                     <div class="md:col-span-2">
                         <h3 class="text-xl font-bold text-gray-800 mb-3">${resultTitle}</h3>
