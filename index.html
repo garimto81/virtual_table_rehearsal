@@ -334,18 +334,19 @@
                         issue: '재작업 이슈 및 누적 작업 스택으로 기한이 무한정으로 늘어남.'
                     }
                 },
-                results: [
-                    { type: 'improvement', category: '버추얼 테이블', text: '버추얼 테이블 프로세스와 소프트 콘텐츠 프로세스 완전 분리' },
-                    { type: 'improvement', category: '버추얼 테이블', text: '버추얼 테이블 촬영자가 버추얼 테이블 편집 작업 (에이든)' },
-                    { type: 'improvement', category: '버추얼 테이블', text: '소프트 콘텐츠 촬영자가 소프트 콘텐츠 편집 작업 (레오)' },
-                    { type: 'improvement', category: '촬영', text: '소프트 콘텐츠 목표: 지루한 샷을 피하고 콘텐츠 퀄리티에 집중하여 전체 프로덕션 콘텐츠에서 환기 역할을 담당.' },
-                    { type: 'improvement', category: '촬영', text: '버추얼 테이블 목표: 모든 플레이어를 담는 촬영 구도 확보 (1~2개의 카메라로 촬영하는 피처 테이블 방식).' },
-                    { type: 'issue', category: '데이터 매니징', text: '데이터가 몰리는 경우를 대비해 사전 부하 분산 작업이 필요하며, 이를 위해 앱 수정 개발이 요구됩니다.' },
-                    { type: 'improvement', category: '데이터 매니징', text: '정확성보다 수집 자체에 집중하여 데이터 누락을 방지해야 합니다.' },
-                    { type: 'improvement', category: '데이터 매니징', text: '핸드 로거는 담당자(Henry) 전용으로 커스터마이징하여 개발해야 합니다.' },
-                    { type: 'improvement', category: '편집', text: '프로세스 분리: 재작업이 잦은 소프트 콘텐츠와 버추얼 테이블 작업을 분리하여 과부하를 방지해야 합니다.' },
-                    { type: 'improvement', category: '편집', text: '아카이빙: 사용되지 않은 핸드도 아카이빙용으로 별도 저장하는 프로세스를 추가해야 합니다.' },
-                    { type: 'issue', category: '편집', text: '약 1시간 작업 후 장비 성능 저하가 심하게 발생하여 장비 업그레이드가 필요합니다.' }
+                problems: [
+                    { type: 'issue', category: '프로세스', text: '버추얼 테이블과 소프트 콘텐츠 작업이 혼재되어 과부하 발생 및 작업 지연.'},
+                    { type: 'issue', category: '데이터 매니징', text: '데이터가 한꺼번에 몰리는 경우 부하가 심하며, 오입력 가능성 존재.'},
+                    { type: 'issue', category: '편집', text: '약 1시간 작업 후 장비 성능 저하가 심하게 발생함.'}
+                ],
+                solutions: [
+                    { type: 'decision', category: '프로세스 & 역할 분담', text: '버추얼 테이블과 소프트 콘텐츠 프로세스 완전 분리.' },
+                    { type: 'decision', category: '프로세스 & 역할 분담', text: 'VT 촬영자(에이든)가 VT 편집, SC 촬영자(레오)가 SC 편집을 각각 전담.' },
+                    { type: 'improvement', category: '촬영', text: '소프트 콘텐츠는 퀄리티, VT는 구도 확보로 촬영 목표 명확화.' },
+                    { type: 'improvement', category: '데이터 매니징', text: '부하 분산 및 담당자 전용 기능(Henry)을 위한 앱 수정/개발.' },
+                    { type: 'improvement', category: '데이터 매니징', text: '수집 시, 정확성보다 누락 방지에 우선순위를 둠.' },
+                    { type: 'improvement', category: '편집', text: '사용되지 않은 핸드 보관을 위한 \'아카이빙\' 저장 프로세스 추가.' },
+                    { type: 'improvement', category: '편집', text: '지속적인 성능 문제 해결을 위한 장비 업그레이드 검토.' }
                 ],
                 cloudinary_videos: [
                     { url: 'https://res.cloudinary.com/dbr6hutiy/video/upload/v1726372138/VT016_SOYE_DAVID_win_9s9d_n17ii7', name: 'DAVID vs SOYEA 탈락 신', description: ''},
@@ -512,29 +513,53 @@
                     `;
                 }
 
-                const categorizedResults = data.results.reduce((acc, result) => {
-                    const category = result.category || '기타';
-                    if (!acc[category]) acc[category] = [];
-                    acc[category].push(result);
-                    return acc;
-                }, {});
-
-                const categoryOrder = ['버추얼 테이블', '촬영', '데이터 매니징', '편집'];
-                
-                const categorizedHtml = categoryOrder.map(category => {
-                    if (!categorizedResults[category]) return '';
-                    const results = categorizedResults[category];
-                    return `
-                        <div class="pt-4 first:pt-0 first:border-none border-t">
-                            <h4 class="text-md font-bold text-gray-700 mb-3">${category} 피드백</h4>
-                            <ul class="space-y-3">
-                                ${results.map(res => createResultItem(res, data.status)).join('')}
-                            </ul>
-                        </div>
+                let problemsHtml = '';
+                if(data.problems && data.problems.length > 0) {
+                    problemsHtml = `
+                    <div class="mb-6">
+                        <h4 class="text-lg font-bold text-red-600 mb-3">단점 및 문제</h4>
+                        <ul class="space-y-3">
+                            ${data.problems.map(res => createResultItem(res)).join('')}
+                        </ul>
+                    </div>
                     `;
-                }).join('');
-                
-                resultsContentHtml = workStatusHtml + categorizedHtml;
+                }
+
+                let solutionsHtml = '';
+                if(data.solutions && data.solutions.length > 0) {
+                    const categorizedSolutions = data.solutions.reduce((acc, result) => {
+                        const category = result.category || '기타';
+                        if (!acc[category]) acc[category] = [];
+                        acc[category].push(result);
+                        return acc;
+                    }, {});
+
+                    const categoryOrder = ['프로세스 & 역할 분담', '촬영', '데이터 매니징', '편집'];
+                    
+                    const categorizedSolutionsHtml = categoryOrder.map(category => {
+                        if (!categorizedSolutions[category]) return '';
+                        const results = categorizedSolutions[category];
+                        return `
+                            <div class="pt-4 first:pt-0">
+                                <h5 class="text-md font-semibold text-gray-700 mb-2">${category}</h5>
+                                <ul class="space-y-3">
+                                    ${results.map(res => createResultItem(res)).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }).join('');
+
+                    solutionsHtml = `
+                    <div class="mt-6 pt-6 border-t">
+                        <h4 class="text-lg font-bold text-blue-600 mb-3">솔루션</h4>
+                        <div class="space-y-4">
+                            ${categorizedSolutionsHtml}
+                        </div>
+                    </div>
+                    `;
+                }
+
+                resultsContentHtml = workStatusHtml + problemsHtml + solutionsHtml;
 
             } else {
                  resultsContentHtml = `<ul class="space-y-3">${data.results.map(res => createResultItem(res, data.status)).join('')}</ul>`;
