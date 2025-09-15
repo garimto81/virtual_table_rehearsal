@@ -319,15 +319,28 @@
                 duration: '5시간 (20:00 ~ 01:00) / VT 17개, 소프트 콘텐츠 5개 촬영',
                 participants: { '호스트': '트레이', '메인 카메라': '레오', '서브 카메라 / 편집': '에이든', '데이터 매니징': '헨리' },
                 key_players: ['DAVID', 'RAY', 'SOYEA', 'SOHEE', 'SHAHINA'],
+                work_status: {
+                    virtual_table: {
+                        completed: 7,
+                        total: 17,
+                        min_time_1cam: 11,
+                        min_time_2cam: 19,
+                        max_time: 60,
+                        insight: '후반 부하가 낮을수록 작업 속도가 빨라짐.'
+                    },
+                    soft_content: {
+                        completed: 0,
+                        total: 5,
+                        issue: '재작업 이슈 및 누적 작업 스택으로 기한이 무한정으로 늘어남.'
+                    }
+                },
                 results: [
-                    
+                    { type: 'improvement', category: '촬영', text: '프로세스 분리: 소프트 콘텐츠(재작업 多)와 버추얼 테이블 작업을 분리하여 과부하 방지 필요.' },
                     { type: 'improvement', category: '촬영', text: '소프트 콘텐츠 목표: 지루한 샷을 피하고 콘텐츠 퀄리티에 집중 -> 전체 프로덕션 콘텐츠에서 환기 역할을 담당.' },
                     { type: 'improvement', category: '촬영', text: '버추얼 테이블 목표: 모든 플레이어를 담는 촬영 구도 확보 -> 1~2개의 카메라로 촬영하는 피처 테이블.' },
-                    { type: 'improvement', category: '데이터 매니징', text: '핸드 로거는 담당자(Henry) 전용으로 커스터마이징.' },
-                    { type: 'issue', category: '데이터 매니징', text: '데이터가 몰리는 경우를 대비해 사전 부하 분산 작업 필요 -> 앱 수정 개발' },
+                    { type: 'issue', category: '데이터 매니징', text: '데이터가 몰리는 경우를 대비해 사전 부하 분산 작업 필요 -> 앱 커스터마이징.' },
                     { type: 'improvement', category: '데이터 매니징', text: '정확성보다 수집 자체에 집중하여 데이터 누락 방지.' },
-                    
-                    { type: 'improvement', category: '촬영', text: '프로세스 분리: 소프트 콘텐츠(재작업 多)와 버추얼 테이블 작업을 분리하여 과부하 방지 필요.' },
+                    { type: 'improvement', category: '데이터 매니징', text: '핸드 로거는 담당자(Henry) 전용으로 커스터마이징.' },
                     { type: 'improvement', category: '편집', text: '아카이빙: 사용되지 않은 핸드도 아카이빙용으로 별도 저장하는 프로세스 추가.' },
                     { type: 'issue', category: '편집', text: '약 1시간 작업 후 장비 성능 저하가 심하게 발생함 -> 장비 업그레이드 필요.' }
                 ],
@@ -437,7 +450,50 @@
                     </div>
                 `;
             } else if (rehearsalId === '5' || rehearsalId === '6') {
-                const categories = ['촬영', '데이터 매니징', '편집'];
+                
+                let workStatusHtml = '';
+                if (data.work_status) {
+                    const workStatus = data.work_status;
+                    workStatusHtml = `
+                        <div class="mb-6">
+                            <h4 class="text-md font-bold text-gray-700 mb-3">작업 진행률</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Virtual Table Card -->
+                                <div class="bg-sky-50 p-4 rounded-xl border border-sky-200">
+                                    <div class="flex justify-between items-center">
+                                        <h5 class="font-bold text-sky-800">버추얼 테이블</h5>
+                                        <span class="font-bold text-lg text-sky-900">${workStatus.virtual_table.completed} / ${workStatus.virtual_table.total}</span>
+                                    </div>
+                                    <div class="relative pt-1">
+                                        <div class="overflow-hidden h-2 my-2 text-xs flex rounded bg-sky-200">
+                                            <div style="width:${(workStatus.virtual_table.completed / workStatus.virtual_table.total) * 100}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-sky-500 transition-all duration-500"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 space-y-2 text-sm text-gray-600">
+                                        <p><strong>작업 시간:</strong> 1캠 최소 ${workStatus.virtual_table.min_time_1cam}분, 2캠 최소 ${workStatus.virtual_table.min_time_2cam}분 (최대 60분 소요)</p>
+                                        <p class="text-sky-700"><span class="font-semibold">Insight:</span> ${workStatus.virtual_table.insight}</p>
+                                    </div>
+                                </div>
+                                <!-- Soft Content Card -->
+                                <div class="bg-red-50 p-4 rounded-xl border border-red-200">
+                                    <div class="flex justify-between items-center">
+                                        <h5 class="font-bold text-red-800">소프트 콘텐츠</h5>
+                                        <span class="font-bold text-lg text-red-900">${workStatus.soft_content.completed} / ${workStatus.soft_content.total}</span>
+                                    </div>
+                                    <div class="relative pt-1">
+                                        <div class="overflow-hidden h-2 my-2 text-xs flex rounded bg-red-200">
+                                            <div style="width:0%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 text-sm text-red-700">
+                                        <p><span class="font-semibold">Issue:</span> ${workStatus.soft_content.issue}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
                 const categorizedResults = data.results.reduce((acc, result) => {
                     const category = result.category || '기타';
                     if (!acc[category]) acc[category] = [];
@@ -449,7 +505,7 @@
                      categorizedResults['GFX'] = categorizedResults['GFX'].map(r => ({...r, text: r.text.replace('GFX ', '') }));
                 }
 
-                resultsContentHtml = Object.entries(categorizedResults).map(([category, results]) => `
+                const categorizedHtml = Object.entries(categorizedResults).map(([category, results]) => `
                     <div class="pt-4 first:pt-0 first:border-none border-t">
                         <h4 class="text-md font-bold text-gray-700 mb-3">${category} 피드백</h4>
                         <ul class="space-y-3">
@@ -474,7 +530,9 @@
                             </ul>
                         </div>
                     `;
-                }
+                 } else {
+                     resultsContentHtml = workStatusHtml + categorizedHtml;
+                 }
 
             } else {
                  resultsContentHtml = `<ul class="space-y-3">${data.results.map(res => createResultItem(res, data.status)).join('')}</ul>`;
