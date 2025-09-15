@@ -333,6 +333,7 @@
                 duration: '5시간 (20:00 ~ 01:00) / VT 17개, 소프트 콘텐츠 5개 촬영',
                 participants: {},
                 results: [
+                    { type: 'issue', text: '약 1시간 작업 후 장비 성능 저하가 심하게 발생함 -> 장비 업그레이드 필요' },
                     { type: 'improvement', text: '프로세스 분리: 소프트 콘텐츠(재작업 多)와 버추얼 테이블 작업을 분리하여 과부하 방지 필요.' },
                     { type: 'improvement', text: '아카이빙: 사용되지 않은 핸드도 아카이빙용으로 별도 저장하는 프로세스 추가.' },
                     { type: 'improvement', text: '촬영 목표 분리 (소프트 콘텐츠): 지루한 샷을 피하고 콘텐츠 퀄리티에 집중.' },
@@ -343,15 +344,15 @@
                     { type: 'improvement', text: '데이터 매니징 개선 (수집): 정확성보다 수집 자체에 집중하여 데이터 누락 방지.' }
                 ],
                 cloudinary_videos: [
-                    { url: 'https://res.cloudinary.com/dbr6hutiy/video/upload/v1726372138/VT016_SOYE_DAVID_win_9s9d_n17ii7', name: 'VT016_SOYE_DAVID_win_9s9d_n17ii7'},
-                    { url: 'https://res.cloudinary.com/dbr6hutiy/video/upload/v1726372132/VT010_SOYE_bigpot_win_himqya', name: 'VT010_SOYE_bigpot_win_himqya'},
-                    { url: 'https://res.cloudinary.com/dbr6hutiy/video/upload/v1726372127/VT002_SOHEE_%EB%A6%AC%EB%B2%84%EC%87%BC%EB%8B%A4%EC%9A%B4_q6cvyc', name: 'VT002_SOHEE_리버쇼다운_q6cvyc'},
+                    { url: 'https://res.cloudinary.com/dbr6hutiy/video/upload/v1726372138/VT016_SOYE_DAVID_win_9s9d_n17ii7', name: 'VT016_SOYE_DAVID_win_9s9d_n17ii7', description: 'DAVID vs SOYEA 탈락 신'},
+                    { url: 'https://res.cloudinary.com/dbr6hutiy/video/upload/v1726372132/VT010_SOYE_bigpot_win_himqya', name: 'VT010_SOYE_bigpot_win_himqya', description: 'SOYEA 스트레이트로 빅팟'},
+                    { url: 'https://res.cloudinary.com/dbr6hutiy/video/upload/v1726372127/VT002_SOHEE_%EB%A6%AC%EB%B2%84%EC%87%BC%EB%8B%A4%EC%9A%B4_q6cvyc', name: 'VT002_SOHEE_리버쇼다운_q6cvyc', description: 'SOHEE 스몰 팟'},
                 ],
                 videos: [
-                    { id: '_4bi-gyb78U', title: '6차 리허설 결과물 (유튜브 1)', description: '뉴스톤 강남점 리허설 영상입니다.' },
-                    { id: 'x_1xmHSUiho', title: '6차 리허설 결과물 (유튜브 2)', description: '뉴스톤 강남점 리허설 영상입니다.' },
-                    { id: 'oB18Chu4D84', title: '6차 리허설 결과물 (유튜브 3)', description: '뉴스톤 강남점 리허설 영상입니다.' },
-                    { id: 'AoVXrGWa3RM', title: '6차 리허설 결과물 (유튜브 4)', description: '뉴스톤 강남점 리허설 영상입니다.' }
+                    { id: '_4bi-gyb78U', title: 'SHAHINA 리버 폴드', description: '뉴스톤 강남점 리허설 영상입니다.' },
+                    { id: 'x_1xmHSUiho', title: 'DAVID 4뱃 올인 K7 투페어', description: '뉴스톤 강남점 리허설 영상입니다.' },
+                    { id: 'oB18Chu4D84', title: 'DAVID 리버 올인 찹 팟', description: '뉴스톤 강남점 리허설 영상입니다.' },
+                    { id: 'AoVXrGWa3RM', title: 'SOHEE 스몰 팟 패배', description: '뉴스톤 강남점 리허설 영상입니다.' }
                 ]
             },
             '7': {
@@ -492,6 +493,7 @@
                            </video>
                         </div>
                         <h4 class="text-md font-bold text-gray-800 break-all">${video.name}</h4>
+                        ${video.description ? `<p class="text-sm text-gray-600 mt-1">${video.description}</p>` : ''}
                     </div>
                  `).join('');
 
@@ -530,7 +532,7 @@
                         </div>
                     </div>
                 `;
-            } else if (data.hasOwnProperty('videos') && !data.cloudinary_videos) {
+            } else if (data.hasOwnProperty('videos') && !(data.cloudinary_videos && data.cloudinary_videos.length > 0)) {
                 finalHtml += `
                     <div class="mt-6 pt-6 border-t border-gray-200">
                         <h3 class="text-xl font-bold text-gray-800 mb-4">결과물 영상</h3>
