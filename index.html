@@ -153,63 +153,6 @@
                     </div>
                 </div>
             </section>
-
-             <section id="process-flow" class="mb-12">
-                <h2 class="text-2xl font-bold text-gray-700 mb-8 text-center">버추얼 테이블 상세 프로세스</h2>
-                <div class="bg-white p-8 rounded-xl shadow-md max-w-4xl mx-auto">
-                    <div class="space-y-8">
-                        <div class="flow-step">
-                            <div class="flow-dot">1</div>
-                            <h3 class="text-lg font-bold text-gray-800">주요 선수 선정</h3>
-                            <p class="text-gray-600">버추얼 테이블 2~3명, 피처 테이블 각 1명씩 총 4~5명 선정하여 시청자 관점에서 주요 선수들에게 집중할 수 있는 환경 마련</p>
-                        </div>
-                        <div class="flow-step">
-                            <div class="flow-dot">2</div>
-                            <h3 class="text-lg font-bold text-gray-800">상황 파악 및 촬영 준비</h3>
-                            <p class="text-gray-600">현장 PD, 카메라, 데이터 매니저가 테이블을 순회하며 상황을 파악하고, 주요 선수의 좋은 핸드가 감지되면 모든 스탭을 호출하여 촬영을 시작합니다.</p>
-                        </div>
-                        <div class="flow-step">
-                            <div class="flow-dot">3</div>
-                            <h3 class="text-lg font-bold text-gray-800">데이터 수집 및 촬영</h3>
-                            <p class="text-gray-600">데이터 매니저는 핸드 데이터를 수집하며, 촬영팀은 콘텐츠 유형에 따라 목표를 분리하여 촬영합니다.</p>
-                            <ul class="list-disc list-inside mt-2 space-y-2 text-gray-500 pl-4">
-                                <li><b>버추얼 테이블:</b> 모든 플레이어를 담는 구도를 확보합니다. (1~2개 카메라로 촬영하는 피처 테이블 방식)</li>
-                                <li><b>소프트 콘텐츠:</b> 지루한 샷을 피하고 콘텐츠 퀄리티에 집중하여 전체 프로덕션의 환기 역할을 담당합니다.</li>
-                             </ul>
-                        </div>
-                        <div class="flow-step">
-                            <div class="flow-dot">4</div>
-                            <h3 class="text-lg font-bold text-gray-800">데이터 정리 및 관리</h3>
-                            <p class="text-gray-600">촬영 완료 후, 데이터 매니저는 앱 커스터마이징을 통해 부하를 분산하고, 정확성보다는 수집 자체에 집중하여 데이터 누락을 방지합니다.</p>
-                        </div>
-                         <div class="flow-step">
-                            <div class="flow-dot">5</div>
-                            <h3 class="text-lg font-bold text-gray-800">소스 전달 및 검증</h3>
-                            <p class="text-gray-600">카메라 메모리카드를 후반 편집자에게 전달하고, 편집자는 구글 시트와 촬영본을 대조하여 검증합니다.</p>
-                        </div>
-                         <div class="flow-step">
-                            <div class="flow-dot">6</div>
-                            <h3 class="text-lg font-bold text-gray-800">그래픽 제작 및 컷 편집 (병렬 진행)</h3>
-                            <p class="text-gray-600">검증 완료 후, 소프트 콘텐츠와 버추얼 테이블 작업을 분리하여 과부하를 방지하며 병렬로 진행합니다.</p>
-                        </div>
-                        <div class="flow-step">
-                            <div class="flow-dot">7</div>
-                            <h3 class="text-lg font-bold text-gray-800">최종 편집</h3>
-                             <p class="text-gray-600">영상에 포커 GUI 그래픽을 삽입하고, 인/아웃점을 편집합니다. 장비 성능 저하에 대비한 업그레이드가 필요할 수 있습니다.</p>
-                        </div>
-                         <div class="flow-step">
-                            <div class="flow-dot">8</div>
-                            <h3 class="text-lg font-bold text-gray-800">콘텐츠 추출 및 전송</h3>
-                             <p class="text-gray-600">최종 완성된 콘텐츠를 추출하여 한국으로 전송합니다.</p>
-                        </div>
-                        <div class="flow-step">
-                            <div class="flow-dot">9</div>
-                            <h3 class="text-lg font-bold text-gray-800">아카이빙</h3>
-                             <p class="text-gray-600">최종 작업물 외에, 버추얼 테이블에서 사용되지 않은 핸드 영상도 별도의 '아카이빙용' 보관함에 저장하여 데이터를 관리합니다.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </main>
     </div>
 
@@ -381,18 +324,24 @@
                         insight: '데이터 매니징의 지원으로 작업시간 대폭 단축.'
                     },
                     soft_content: {
-                        completed: 2,
-                        total: 2,
+                        completed: 3,
+                        total: 3,
                         insight: '프로필 업데이트 중심으로 작업시간 최적화 달성.',
                         issue: '버추얼 테이블 촬영과 충돌이 종종 발생 가능.'
                     }
                 },
                 problems: [
-                     { type: 'issue', category: '데이터 매니징', text: '핸드 로거 앱 에러 발생 시 데이터 매니저 업무 중단 문제 발생 (임시방편: 채팅 앱 사용)'},
-                     { type: 'issue', category: '프로세스', text: '모든 버추얼 테이블에 자막 작업(칩 스택, 탈락 등)이 필수로 확인되어, 기존의 콘텐츠 분리 전략 재검토 필요.'}
+                     { type: 'issue', category: '데이터 매니징', text: '핸드 로거 앱 에러 발생 시 데이터 매니저 업무 중단 문제 발생 (임시방편: 채팅 앱 사용).'},
+                     { type: 'issue', category: '프로세스', text: '모든 버추얼 테이블에 자막 작업(칩 스택, 탈락 등)이 필수로 확인되어, 기존의 콘텐츠 분리 전략 재검토 필요.'},
+                     { type: 'issue', category: '촬영', text: '짐벌 5시간 이상 사용하기 어려움 (RS2 구형 모델은 더 어려움).'},
+                     { type: 'issue', category: '프로세스', text: '소프트 콘텐츠 제작 프로세스가 문서화되어 있지 않고 구두로만 전달되어, 내용이 누락되거나 오입력될 소지가 있습니다.'},
+                     { type: 'issue', category: '프로세스', text: '현장의 복잡성으로 인해 데이터 아카이빙이 간소화(마지막 파일만 사용)되면서, 중간 과정의 중요 데이터가 저장되지 못하는 어려움이 있습니다.'},
+                     { type: 'issue', category: '편집', text: '버추얼 테이블과 소프트 콘텐츠 모두에 신속하게 주석을 다는 현재 워크플로우가 비효율적입니다.'}
                 ],
                 solutions: [
-                    { type: 'decision', category: '소프트 콘텐츠', text: '레오가 소프트 콘텐츠 전담을 맡고, 인물 업데이트 제작 시에는 해당 작업에만 집중.' }
+                    { type: 'decision', category: '소프트 콘텐츠', text: '레오가 소프트 콘텐츠 전담을 맡고, 인물 업데이트 제작 시에는 해당 작업에만 집중.' },
+                    { type: 'improvement', category: '촬영', text: '키 플레이어의 여운을 담기 위해 엔딩신에 줌인 필수.' },
+                    { type: 'decision', category: '프로세스 & 역할 분담', text: 'SD 메모리 카드 전달 규칙 수립: 1차 @aiden.kim 작업 → 2차 @henry.lee 전달 대기 → 종료 후 현장 복귀 반복' }
                 ],
                 videos: [
                     { id: '6T_Jd7IHXys', title: '성배 탈락신', description: '' },
@@ -402,7 +351,11 @@
                     { id: 'HHpk1AJL1EE', title: '성배 풀하우스 승리 (2cam)', description: '' },
                     { id: 'Sa0EV2GAlsU', title: '성배 빅 팟 승리 (풀 하우스 vs 트립스)', description: '' },
                     { id: 'Pm8cK20Cx9Q', title: '성배 승리 (2cam)', description: '' }
-                ]
+                ],
+                drive_links: {
+                    virtual_table: 'https://drive.google.com/drive/folders/147o-rzEYO9XvySE4eG5vo0QYOav-MbKp?usp=drive_link',
+                    soft_content: 'https://drive.google.com/drive/folders/1lr7v0HlD2-UhwUf5doS_OmLgPjvsOjO9?usp=drive_link'
+                }
             }
         };
         
@@ -684,6 +637,31 @@
                     </div>
                 `;
             }
+
+            if (data.drive_links) {
+                finalHtml += `
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">구글 드라이브 백업 아카이빙 폴더</h3>
+                        <div class="space-y-3">
+                            <a href="${data.drive_links.virtual_table}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between bg-blue-50 hover:bg-blue-100 p-4 rounded-lg transition-colors">
+                                <div class="flex items-center">
+                                    <svg class="w-6 h-6 text-blue-500 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                                    <span class="font-semibold text-gray-800">버추얼 테이블</span>
+                                </div>
+                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </a>
+                            <a href="${data.drive_links.soft_content}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between bg-green-50 hover:bg-green-100 p-4 rounded-lg transition-colors">
+                                <div class="flex items-center">
+                                     <svg class="w-6 h-6 text-green-500 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                                    <span class="font-semibold text-gray-800">소프트 콘텐츠</span>
+                                </div>
+                                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+
             detailsEl.innerHTML = finalHtml;
         }
 
