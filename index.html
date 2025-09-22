@@ -351,7 +351,7 @@
                 cloudinary_videos: [
                     { url: 'https://res.cloudinary.com/dbr6hutiy/video/upload/v1726372138/VT016_SOYE_DAVID_win_9s9d_n17ii7', name: 'DAVID vs SOYEA 탈락 신', description: ''},
                     { url: 'https://res.cloudinary.com/dbr6hutiy/video/upload/v1726372132/VT010_SOYE_bigpot_win_himqya', name: 'SOYEA 스트레이트로 빅팟', description: ''},
-                    { url: 'https://res.cloudinary.com/dbr6hutiy/video/upload/v1726372127/VT002_SOHEE_%EB%A6%AC%EB%B2%84%EC%87%BC%EB%8B%A4%EC%9A%B4_q6cvyc', name: 'SOHEE 스몰 팟', description: ''},
+                    { url: 'https://res.cloudinary.com/dbr6hutiy/video/upload/v1726372127/VT002_SOHEE_%EB%A6%AC%EB%B2%84%EC%87%BC%EB%8B%A4%EC%9A%Bونَ_q6cvyc', name: 'SOHEE 스몰 팟', description: ''},
                 ],
                 videos: [
                     { id: '_4bi-gyb78U', title: 'SHAHINA 리버 폴드', description: '' },
@@ -361,12 +361,48 @@
                 ]
             },
             '7': {
-                id: '7', date: '9월 3주차', status: '계획', goal: '데이터 매니징 앱 개선사항 테스트', location: '미정', duration: '미정',
-                participants: { '참여 인원': '미정' },
-                results: [
-                    { type: 'pending', text: 'UI/UX 개선 피드백 반영 및 버그 수정 확인.' }
+                id: '7', date: '9/19', status: '완료',
+                goal: [
+                    '촬영 : 짐벌 촬영 유지 시간 체크, 버추얼 테이블 와 소프트 콘텐츠와의 촬영 밸런싱',
+                    '데이터 : 핵심 데이터 전송 달성률 70%',
+                    '편집 : 평균 제작시간 12분 달성'
                 ],
-                videos: []
+                location: '뉴스톤 강남점',
+                duration: '5시간 (20:00 ~ 25:00)',
+                participants: { '호스트': '트레이', '메인 카메라': '레오', '서브 카메라 / 편집': '에이든', '데이터 매니징': '헨리' },
+                key_players: ['SOHEE', 'SUNGBAE', 'DAVIN', 'SOYEA', 'TREY', 'STEVE YEA'],
+                 work_status: {
+                    virtual_table: {
+                        completed: 6,
+                        total: 12,
+                        avg_time: 12.18,
+                        min_time: 9,
+                        max_time: 16,
+                        insight: '데이터 매니징의 지원으로 작업시간 대폭 단축.'
+                    },
+                    soft_content: {
+                        completed: 2,
+                        total: 2,
+                        insight: '프로필 업데이트 중심으로 작업시간 최적화 달성.',
+                        issue: '버추얼 테이블 촬영과 충돌이 종종 발생 가능.'
+                    }
+                },
+                problems: [
+                     { type: 'issue', category: '데이터 매니징', text: '핸드 로거 앱 에러 발생 시 데이터 매니저 업무 중단 문제 발생 (임시방편: 채팅 앱 사용)'},
+                     { type: 'issue', category: '프로세스', text: '모든 버추얼 테이블에 자막 작업(칩 스택, 탈락 등)이 필수로 확인되어, 기존의 콘텐츠 분리 전략 재검토 필요.'}
+                ],
+                solutions: [
+                    { type: 'decision', category: '소프트 콘텐츠', text: '레오가 소프트 콘텐츠 전담을 맡고, 인물 업데이트 제작 시에는 해당 작업에만 집중.' }
+                ],
+                videos: [
+                    { id: '6T_Jd7IHXys', title: '성배 탈락신', description: '' },
+                    { id: 'ILhZ057kGjw', title: '소예 탈락신', description: '' },
+                    { id: 'm3gUUkPEjgM', title: '성배 큰팟 폴드 후 아쉬워하는 모습', description: '' },
+                    { id: 'V60tsqH0oeU', title: '수린 블러프, 미스터리 핸드 스타일', description: '' },
+                    { id: 'HHpk1AJL1EE', title: '성배 풀하우스 승리 (2cam)', description: '' },
+                    { id: 'Sa0EV2GAlsU', title: '성배 빅 팟 승리 (풀 하우스 vs 트립스)', description: '' },
+                    { id: 'Pm8cK20Cx9Q', title: '성배 승리 (2cam)', description: '' }
+                ]
             }
         };
         
@@ -469,11 +505,12 @@
                         </ul>
                     </div>
                 `;
-            } else if (rehearsalId === '6') {
+            } else if (rehearsalId === '6' || rehearsalId === '7') {
                 let workStatusHtml = '';
                 if (data.work_status) {
-                    const workStatus = data.work_status;
-                    workStatusHtml = `
+                     const ws_vt = data.work_status.virtual_table;
+                     const ws_sc = data.work_status.soft_content;
+                     workStatusHtml = `
                         <div class="mb-6">
                             <h4 class="text-md font-bold text-gray-700 mb-3">작업 진행률</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -481,31 +518,34 @@
                                 <div class="bg-sky-50 p-4 rounded-xl border border-sky-200">
                                     <div class="flex justify-between items-center">
                                         <h5 class="font-bold text-sky-800">버추얼 테이블</h5>
-                                        <span class="font-bold text-lg text-sky-900">${workStatus.virtual_table.completed} / ${workStatus.virtual_table.total}</span>
+                                        <span class="font-bold text-lg text-sky-900">${ws_vt.completed} / ${ws_vt.total}</span>
                                     </div>
                                     <div class="relative pt-1">
                                         <div class="overflow-hidden h-2 my-2 text-xs flex rounded bg-sky-200">
-                                            <div style="width:${(workStatus.virtual_table.completed / workStatus.virtual_table.total) * 100}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-sky-500 transition-all duration-500"></div>
+                                            <div style="width:${(ws_vt.completed / ws_vt.total) * 100}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-sky-500 transition-all duration-500"></div>
                                         </div>
                                     </div>
                                     <div class="mt-3 space-y-2 text-sm text-gray-600">
-                                        <p><strong>작업 시간:</strong> 1캠 최소 ${workStatus.virtual_table.min_time_1cam}분, 2캠 최소 ${workStatus.virtual_table.min_time_2cam}분 (최대 60분 소요)</p>
-                                        <p class="text-sky-700"><span class="font-semibold">Insight:</span> ${workStatus.virtual_table.insight}</p>
+                                        ${ws_vt.avg_time ? `<p><strong>평균 작업 시간:</strong> ${ws_vt.avg_time}분</p>` : ''}
+                                        ${ws_vt.min_time_1cam ? `<p><strong>작업 시간:</strong> 1캠 최소 ${ws_vt.min_time_1cam}분, 2캠 최소 ${ws_vt.min_time_2cam}분 (최대 ${ws_vt.max_time}분 소요)</p>` : ''}
+                                        ${ws_vt.min_time && !ws_vt.min_time_1cam ? `<p><strong>작업 시간:</strong> 최단 ${ws_vt.min_time}분, 최장 ${ws_vt.max_time}분</p>` : ''}
+                                        <p class="text-sky-700"><span class="font-semibold">Insight:</span> ${ws_vt.insight}</p>
                                     </div>
                                 </div>
                                 <!-- Soft Content Card -->
-                                <div class="bg-red-50 p-4 rounded-xl border border-red-200">
+                                <div class="bg-orange-50 p-4 rounded-xl border border-orange-200">
                                     <div class="flex justify-between items-center">
-                                        <h5 class="font-bold text-red-800">소프트 콘텐츠</h5>
-                                        <span class="font-bold text-lg text-red-900">${workStatus.soft_content.completed} / ${workStatus.soft_content.total}</span>
+                                        <h5 class="font-bold text-orange-800">소프트 콘텐츠</h5>
+                                        <span class="font-bold text-lg text-orange-900">${ws_sc.completed} / ${ws_sc.total}</span>
                                     </div>
                                     <div class="relative pt-1">
-                                        <div class="overflow-hidden h-2 my-2 text-xs flex rounded bg-red-200">
-                                            <div style="width:0%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"></div>
+                                        <div class="overflow-hidden h-2 my-2 text-xs flex rounded bg-orange-200">
+                                            <div style="width:${(ws_sc.completed / ws_sc.total) * 100}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-orange-500"></div>
                                         </div>
                                     </div>
-                                    <div class="mt-3 text-sm text-red-700">
-                                        <p><span class="font-semibold">Issue:</span> ${workStatus.soft_content.issue}</p>
+                                    <div class="mt-3 text-sm text-orange-700">
+                                         <p><span class="font-semibold">Insight:</span> ${ws_sc.insight}</p>
+                                        ${ws_sc.issue ? `<p class="text-red-700 mt-2"><span class="font-semibold">Issue:</span> ${ws_sc.issue}</p>` : ''}
                                     </div>
                                 </div>
                             </div>
@@ -534,7 +574,7 @@
                         return acc;
                     }, {});
 
-                    const categoryOrder = ['프로세스 & 역할 분담', '촬영', '데이터 매니징', '편집'];
+                    const categoryOrder = ['프로세스 & 역할 분담', '소프트 콘텐츠', '촬영', '데이터 매니징', '편집'];
                     
                     const categorizedSolutionsHtml = categoryOrder.map(category => {
                         if (!categorizedSolutions[category]) return '';
@@ -558,7 +598,7 @@
                     </div>
                     `;
                 }
-
+                
                 resultsContentHtml = workStatusHtml + problemsHtml + solutionsHtml;
 
             } else {
